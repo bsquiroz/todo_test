@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "./components/Button";
 
 interface Todo {
@@ -31,6 +31,16 @@ const initValuesForm = {
 function App() {
   const [todos, setTodos] = useState<Todo[]>(dataTodos);
   const [valuesForm, setValuesForm] = useState(initValuesForm);
+  const [todoForEdit, setTodoForEdit] = useState<Todo>();
+
+  useEffect(() => {
+    if (todoForEdit) {
+      setValuesForm({
+        title: todoForEdit.title,
+        desc: todoForEdit.desc,
+      });
+    }
+  }, [todoForEdit]);
 
   const onchageInputs = (key: string, value: string) => {
     setValuesForm({
@@ -41,6 +51,14 @@ function App() {
 
   const handleCreateTodo = (todo: Todo) => {
     setTodos([todo, ...todos]);
+  };
+
+  const handleUpdateTodo = (editTodo: Todo) => {
+    const newArrTodos = todos.map((todo) =>
+      todo.id === editTodo.id ? editTodo : todo
+    );
+    setTodos(newArrTodos);
+    setTodoForEdit(undefined);
   };
 
   const handleDeleteTodo = (id: string) => {
@@ -64,30 +82,42 @@ function App() {
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const newTodo = {
-      ...valuesForm,
-      id: `${crypto.randomUUID}`,
-      status: false,
-    };
+    if (todoForEdit) {
+      handleUpdateTodo({
+        ...todoForEdit,
+        ...valuesForm,
+      });
+    } else {
+      const newTodo = {
+        ...valuesForm,
+        id: `${crypto.randomUUID}`,
+        status: false,
+      };
 
-    handleCreateTodo(newTodo);
+      handleCreateTodo(newTodo);
+    }
 
     setValuesForm(initValuesForm);
   };
 
   return (
     <section className=" bg-slate-900 text-white">
-      <main className="max-w-2xl m-auto p-4 min-h-screen">
+      <main className="max-w-lg m-auto p-4 min-h-screen">
         {/* Header */}
         <header>
-          <span className="font-bold text-green-500 cursor-pointer">
-            TODO TEST
-          </span>
+          <a className="flex gap-2" href="" target="_blank">
+            <img className="w-5" src="/test.png" alt="logo" />
+            <span className="font-extrabold text-red-500 cursor-pointer">
+              TODO TEST
+            </span>
+          </a>
         </header>
 
         {/* Form */}
         <form className="flex flex-col gap-4 p-4" onSubmit={handleOnSubmit}>
-          <h2 className="text-2xl text-center">Creación de la tarea</h2>
+          <h2 className="text-2xl text-center">
+            {todoForEdit ? "Edición de tarea" : "Creación de la tarea"}
+          </h2>
           <div className="flex flex-col gap-2">
             <label htmlFor="title">Nombre de la tarea</label>
             <input
@@ -110,7 +140,10 @@ function App() {
             />
           </div>
 
-          <Button text="Crear tarea" type="info" onClick={() => {}} />
+          <Button
+            text={todoForEdit ? "Editar tarea" : "Crear tarea"}
+            type={todoForEdit ? "warning" : "info"}
+          />
         </form>
 
         {/* Tareas */}
@@ -132,7 +165,7 @@ function App() {
                     <input
                       type="checkbox"
                       id={`status-${todo.id}`}
-                      checked={todo.status}
+                      defaultChecked={todo.status}
                       onClick={() => handleChangeStatus(todo.id)}
                     />
                     <label
@@ -145,7 +178,13 @@ function App() {
                   <p className="font-extralight text-sm">{todo.desc}</p>
 
                   <div className="flex gap-4">
-                    <Button text="Editar" type="warning" onClick={() => {}} />
+                    <Button
+                      text="Editar"
+                      type="warning"
+                      onClick={() => {
+                        setTodoForEdit(todo);
+                      }}
+                    />
                     <Button
                       onClick={() => handleDeleteTodo(todo.id)}
                       text="Eliminar"
