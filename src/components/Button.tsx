@@ -8,7 +8,7 @@ const styleTypeButton: Record<typeButton, string> = {
   info: "bg-blue-500",
 };
 
-export const Button = ({ text, type }: ButtonProps) => {
+export const Button = ({ text, type, onClick }: ButtonProps) => {
   const typeButton = useMemo(
     () => styleTypeButton[type] || styleTypeButton["info"],
     [type]
@@ -16,6 +16,7 @@ export const Button = ({ text, type }: ButtonProps) => {
 
   return (
     <button
+      onClick={onClick}
       className={`
       cursor-pointer rounded-full 
       py-2 px-4
