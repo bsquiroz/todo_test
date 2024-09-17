@@ -86,6 +86,12 @@ function App() {
     setTodos(newArrTodo);
   };
 
+  const resetValues = () => {
+    const init = { desc: "", title: "" };
+    setErrors(init);
+    setValuesForm(init);
+  };
+
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -146,6 +152,7 @@ function App() {
               className="rounded-full text-black py-1 px-2 outline-none"
               type="text"
               id="title"
+              maxLength={30}
             />
           </div>
 
@@ -165,6 +172,7 @@ function App() {
               className="rounded-full text-black py-1 px-2 outline-none"
               type="text"
               id="desc"
+              maxLength={100}
             />
           </div>
 
@@ -212,10 +220,14 @@ function App() {
                       type="warning"
                       onClick={() => {
                         setTodoForEdit(todo);
+                        resetValues();
                       }}
                     />
                     <Button
-                      onClick={() => handleDeleteTodo(todo.id)}
+                      onClick={() => {
+                        handleDeleteTodo(todo.id);
+                        resetValues();
+                      }}
                       text="Eliminar"
                       type="error"
                     />
