@@ -5,7 +5,9 @@ function App() {
     <section className=" bg-slate-900 text-white">
       <main className="max-w-2xl m-auto p-4 min-h-screen">
         <header>
-          <span className="font-bold">TODO TEST</span>
+          <span className="font-bold text-green-500 cursor-pointer">
+            TODO TEST
+          </span>
         </header>
 
         <form className="flex flex-col gap-4 p-4">
@@ -30,6 +32,22 @@ function App() {
 
           <Button text="Crear tarea" type="info" />
         </form>
+
+        <section className="mt-4 border-2 border-transparent rounded-md shadow-sm shadow-slate-700 p-4">
+          <article className="flex flex-col gap-2">
+            <h2 className="font-bold">Title</h2>
+            <p className="font-extralight text-sm">
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Iure,
+              consequatur hic nulla obcaecati pariatur vel unde velit sunt
+              aspernatur commodi!
+            </p>
+
+            <div className="flex gap-4">
+              <Button text="Editar" type="warning" />
+              <Button text="Eliminar" type="error" />
+            </div>
+          </article>
+        </section>
       </main>
     </section>
   );

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo } from "react";
 import { Button as ButtonProps, typeButton } from "./components";
 
 const styleTypeButton: Record<typeButton, string> = {
@@ -9,12 +9,22 @@ const styleTypeButton: Record<typeButton, string> = {
 };
 
 export const Button = ({ text, type }: ButtonProps) => {
-  const [typeButton] = useState(
-    styleTypeButton[type] || styleTypeButton["info"]
+  const typeButton = useMemo(
+    () => styleTypeButton[type] || styleTypeButton["info"],
+    [type]
   );
 
   return (
-    <button className={`cursor-pointer rounded-full p-2 ${typeButton}`}>
+    <button
+      className={`
+      cursor-pointer rounded-full 
+      py-2 px-4
+      hover:opacity-90
+      active:scale-95
+      transition-all
+      ${typeButton}
+    `}
+    >
       {text}
     </button>
   );
