@@ -114,7 +114,11 @@ function App() {
       <main className="max-w-lg m-auto p-4 min-h-screen">
         {/* Header */}
         <header>
-          <a className="flex gap-2" href="" target="_blank">
+          <a
+            className="flex gap-2"
+            href="https://github.com/bsquiroz/todo_test"
+            target="_blank"
+          >
             <img className="w-5" src="/test.png" alt="logo" />
             <span className="font-extrabold text-red-500 cursor-pointer">
               TODO TEST
