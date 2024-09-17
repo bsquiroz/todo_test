@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "./components/Button";
+import { getErrors } from "./utils/getErrors";
 
 interface Todo {
   id: string;
@@ -28,10 +29,16 @@ const initValuesForm = {
   desc: "",
 };
 
+const errorsMessage = {
+  title: "El nombre de la tarea es requerida",
+  desc: "La descripción de la tarea es requerida",
+};
+
 function App() {
   const [todos, setTodos] = useState<Todo[]>(dataTodos);
   const [valuesForm, setValuesForm] = useState(initValuesForm);
   const [todoForEdit, setTodoForEdit] = useState<Todo>();
+  const [errors, setErrors] = useState({ title: "", desc: "" });
 
   useEffect(() => {
     if (todoForEdit) {
@@ -82,6 +89,8 @@ function App() {
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    if (getErrors(valuesForm, setErrors, errorsMessage)) return;
+
     if (todoForEdit) {
       handleUpdateTodo({
         ...todoForEdit,
@@ -90,7 +99,7 @@ function App() {
     } else {
       const newTodo = {
         ...valuesForm,
-        id: `${crypto.randomUUID}`,
+        id: crypto.randomUUID(),
         status: false,
       };
 
@@ -119,7 +128,14 @@ function App() {
             {todoForEdit ? "Edición de tarea" : "Creación de la tarea"}
           </h2>
           <div className="flex flex-col gap-2">
-            <label htmlFor="title">Nombre de la tarea</label>
+            <label htmlFor="title">
+              Nombre de la tarea <span className="text-red-500">*</span>{" "}
+              {errors.title && (
+                <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                  {errors.title}
+                </span>
+              )}
+            </label>
             <input
               value={valuesForm.title}
               onChange={(e) => onchageInputs("title", e.target.value)}
@@ -130,7 +146,15 @@ function App() {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label htmlFor="desc">Descripción de la tarea</label>
+            <label htmlFor="desc">
+              Descripción de la tarea
+              <span className="text-red-500">*</span>
+              {errors.desc && (
+                <span className="text-xs bg-red-500 text-white px-2 py-1 rounded-full">
+                  {errors.desc}
+                </span>
+              )}
+            </label>
             <input
               value={valuesForm.desc}
               onChange={(e) => onchageInputs("desc", e.target.value)}
@@ -165,6 +189,7 @@ function App() {
                     <input
                       type="checkbox"
                       id={`status-${todo.id}`}
+                      className="rounded-full bg-black"
                       defaultChecked={todo.status}
                       onClick={() => handleChangeStatus(todo.id)}
                     />
