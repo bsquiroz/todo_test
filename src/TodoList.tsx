@@ -34,7 +34,7 @@ const errorsMessage = {
   desc: "La descripción de la tarea es requerida",
 };
 
-function App() {
+function TodoList() {
   const [todos, setTodos] = useState<Todo[]>(dataTodos);
   const [valuesForm, setValuesForm] = useState(initValuesForm);
   const [todoForEdit, setTodoForEdit] = useState<Todo>();
@@ -240,4 +240,4 @@ function App() {
   );
 }
 
-export default App;
+export default TodoList;
