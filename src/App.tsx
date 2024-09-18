@@ -87,9 +87,7 @@ function App() {
   };
 
   const resetValues = () => {
-    const init = { desc: "", title: "" };
-    setErrors(init);
-    setValuesForm(init);
+    setErrors({ desc: "", title: "" });
   };
 
   const handleOnSubmit = (e: React.FormEvent<HTMLFormElement>) => {
